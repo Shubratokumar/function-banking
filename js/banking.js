@@ -3,7 +3,6 @@
 
 // reduce or common function for input field
 function getInputValue(inputId){
-    //debugger; // for debugging with browser console
     const inputField = document.getElementById(inputId);
     const inputAmountText = inputField.value;
     const inputValue = parseFloat(inputAmountText);
@@ -22,11 +21,20 @@ function totalFieldUpdate(newTotal, newAmount){
     totalAmountField.innerText =  previousTotalAmount + newAmount;
 }
 
-// reduce or commom function for getting values and update field
-function updateBalanceField(balanceAmount, isAdd){
+// get current balance using function for validation
+function getCurrentBalance(){
     const balanceTotalAmount = document.getElementById('balance-total');
     const balanceTotalText = balanceTotalAmount.innerText;
     const previousBalanceTotal = parseFloat(balanceTotalText);
+    return previousBalanceTotal;
+}
+
+// update balance : reduce or commom function for getting values and update field
+function updateBalanceField(balanceAmount, isAdd){
+    const balanceTotalAmount = document.getElementById('balance-total');
+    /* const balanceTotalText = balanceTotalAmount.innerText;
+    const previousBalanceTotal = parseFloat(balanceTotalText); */
+    const previousBalanceTotal = getCurrentBalance();
     // update new balance using conditions
     if(isAdd == false){
         // condition for substract
@@ -48,8 +56,7 @@ document.getElementById('deposit-button').addEventListener('click',function(){
     //use parseFloat method for get a number not string
     const newDepositAmount = parseFloat(newDepositAmountText); */
 
-    // call function : input field
-    const newDepositAmount = getInputValue('deposit-input');
+    
 
     /* //get and update current deposit from total deposit
     const depositTotal = document.getElementById('deposit-total');
@@ -58,9 +65,7 @@ document.getElementById('deposit-button').addEventListener('click',function(){
     const previousDepositTotal = parseFloat(previousDepositText);
     // update new deposit
     depositTotal.innerText =  previousDepositTotal + newDepositAmount; */
-
-    // call function : new total field
-    const totalDepositAmount = totalFieldUpdate('deposit-total', newDepositAmount)
+    
 
     /* // update current balance from total deposit
     const balanceTotal = document.getElementById('balance-total');
@@ -69,8 +74,13 @@ document.getElementById('deposit-button').addEventListener('click',function(){
 
     balanceTotal.innerText = previousBalanceTotal + newDepositAmount; */
 
-    // call function : new balance field
-    const totalBalance = updateBalanceField(newDepositAmount, true)
+    // call function : input field, new total field & new balance field
+    const newDepositAmount = getInputValue('deposit-input');
+    // input validation : when input is a negative number as well as a string
+    if(newDepositAmount > 0){
+        const totalDepositAmount = totalFieldUpdate('deposit-total', newDepositAmount)
+        const totalBalance = updateBalanceField(newDepositAmount, true)
+    } 
     /* // clean input field
     depositInput.value = ''; */
 })
@@ -82,8 +92,7 @@ document.getElementById("withdraw-button").addEventListener('click', function(){
     const newWithdrawAmountText = withdrawInput.value;
     const newWithdrawAmount = parseFloat(newWithdrawAmountText); */
 
-    // call function : input field
-    const newWithdrawAmount = getInputValue('withdraw-input');
+    
 
     /* // get and update withdraw total 
     const withdrawTotal = document.getElementById('withdraw-total');
@@ -92,8 +101,7 @@ document.getElementById("withdraw-button").addEventListener('click', function(){
 
     withdrawTotal.innerText = previousWithdrawTotal + newWithdrawAmount; */
 
-    // call function : new total field
-    const totalWithdrawAmount = totalFieldUpdate('withdraw-total', newWithdrawAmount)
+    
 
     /* // update balance after withdraw
     const balanceTotal = document.getElementById('balance-total');
@@ -102,8 +110,17 @@ document.getElementById("withdraw-button").addEventListener('click', function(){
 
     balanceTotal.innerText = previousBalanceTotal - newWithdrawAmount; */
 
-    // call function : new balance field
-    const totalBalance = updateBalanceField(newWithdrawAmount, false);
+    // call function : input field, new total field & new balance field
+    const newWithdrawAmount = getInputValue('withdraw-input');
+    const currentBalance = getCurrentBalance();
+    // input validation : when input is a negative number as well as a string
+    if(newWithdrawAmount > 0 && newWithdrawAmount < currentBalance){
+        const totalWithdrawAmount = totalFieldUpdate('withdraw-total', newWithdrawAmount)
+        const totalBalance = updateBalanceField(newWithdrawAmount, false);
+    }
+    if(newWithdrawAmount > currentBalance){
+        alert('You can not withdraw more than what you have in your account !!!')
+    }
 
     /* // clean withdraw input field
     withdrawInput.value = ''; */
